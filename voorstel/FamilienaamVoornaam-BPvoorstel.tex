@@ -9,7 +9,9 @@
 \documentclass{hogent-article}
 
 % Invoegen bibliografiebestand
-\addbibresource{voorstel.bib}
+\usepackage[backend=biber,style=apa]{biblatex}
+\DeclareLanguageMapping{dutch}{dutch-apa}
+\addbibresource{ArneMoensVoorstel.bib}
 
 % Informatie over de opleiding, het vak en soort opdracht
 \studyprogramme{Professionele bachelor toegepaste informatica}
@@ -23,11 +25,13 @@
 \academicyear{2022-2023} % TODO: pas het academiejaar aan
 
 % TODO: Werktitel
-\title{Vul hier de voorgestelde titel van je onderzoek in}
+\title{Het opstellen van een interactief, dynamisch en
+    gepersonaliseerd dashboard met behulp van widgets voor het opvolgen van GPS tracking systemen: \\
+    onderzoek en proof of concept}
 
 % TODO: Studentnaam en emailadres invullen
-\author{Ernst Aarden}
-\email{ernst.aarden@student.hogent.be}
+\author{Arne Moens}
+\email{arne.moens@student.hogent.be}
 
 % TODO: Medestudent
 % Gaat het om een bachelorproef in samenwerking met een student in een andere
@@ -36,7 +40,8 @@
 % \email{yasmine.alaoui@student.hogent.be}
 
 % TODO: Geef de co-promotor op
-\supervisor[Co-promotor]{S. Beekman (Synalco, \href{mailto:sigrid.beekman@synalco.be}{sigrid.beekman@synalco.be})}
+
+\supervisor[Co-promotor]{S. Van Hoof (Sensolus, \href{mailto:steven.vanhoof@sensolus.com;}{steven.vanhoof@sensolus.com})}
 
 % Binnen welke specialisatierichting uit 3TI situeert dit onderzoek zich?
 % Kies uit deze lijst:
@@ -50,20 +55,74 @@
 %   zelf
 %
 \specialisation{Mobile \& Enterprise development}
-\keywords{Scheme, World Wide Web, $\lambda$-calculus}
+\keywords{Dashboard, Open-source librairies, React}
 
 \begin{document}
-
-\begin{abstract}
-  Hier schrijf je de samenvatting van je voorstel, als een doorlopende tekst van één paragraaf. Let op: dit is geen inleiding, maar een samenvattende tekst van heel je voorstel met inleiding (voorstelling, kaderen thema), probleemstelling en centrale onderzoeksvraag, onderzoeksdoelstelling (wat zie je als het concrete resultaat van je bachelorproef?), voorgestelde methodologie, verwachte resultaten en meerwaarde van dit onderzoek (wat heeft de doelgroep aan het resultaat?).
-\end{abstract}
-
-\tableofcontents
-
-% De hoofdtekst van het voorstel zit in een apart bestand, zodat het makkelijk
-% kan opgenomen worden in de bijlagen van de bachelorproef zelf.
-\input{voorstel-inhoud}
-
-\printbibliography[heading=bibintoc]
-
+    
+    \begin{abstract}
+        %  Hier schrijf je de samenvatting van je voorstel, als een doorlopende tekst van één paragraaf. Let op: dit is geen inleiding, maar een samenvattende tekst van heel je voorstel met inleiding (voorstelling, kaderen thema), probleemstelling en centrale onderzoeksvraag, onderzoeksdoelstelling (wat zie je als het concrete resultaat van je bachelorproef?), voorgestelde methodologie, verwachte resultaten en meerwaarde van dit onderzoek (wat heeft de doelgroep aan het resultaat?).
+        In deze bachelorproef wordt een proof of concept opgezet die het gebruik van open-source librairies bij het creëren van een interactief, dynamisch en gepersonaliseerd dashboard voor GPS tracking systemen zal demonstreren. Er zal onderzocht worden waaraan het dashboard moet voldoen om zo succesvol mogelijk te zijn. Daarnaast zal ook bekeken worden welke open-source librairies ter beschikking zijn en welke delen van de software zelf  zullen moeten geschreven worden. Het dashboard zal voornamelijk trackingdata en kaarten weergeven op een React website met behulp van widgets.
+    \end{abstract}
+    
+    \tableofcontents
+    
+    % De hoofdtekst van het voorstel zit in een apart bestand, zodat het makkelijk
+    % kan opgenomen worden in de bijlagen van de bachelorproef zelf.
+    %---------- Inleiding ---------------------------------------------------------
+    
+    \section{Introductie}%
+    \label{sec:introductie}
+    
+    Doordat we steeds meer in de mogelijkheid zijn om grote hoeveelheden gegevens te verzamelen, wordt de noodzaak voor data analyse steeds groter. Dashboards zijn één van de meest gebruikte hulpmiddelen om een visuele voorstelling te geven van de belangrijkste informatie waardoor snel correcte beslissingen kunnen genomen worden of waardoor je gemakkelijk de laatste gegevens kan raadplegen. 
+    Helaas zijn deze dashboards vandaag de dag meestal nog niet interactief en dynamisch. 
+    
+    
+    Het bedrijf Sensolus verkoopt software die de klanten de mogelijkheid biedt om informatie te bekijken van hun trackers. Momenteel gebeurt dit nog via verschillende voorgedefinieerde dashboards.
+    Omdat niet elke gebruiker alle informatie nodig heeft die beschikbaar is op deze voorgedefinieerde dashboards en de informatie verspreid staat op verschillende dashboards, zou het handig zijn mocht de gebruiker de mogelijkheid hebben om een gepersonaliseerde dashboard samen te stellen via widgets.
+    
+    
+    In deze bachelorproef zal ik analyseren welke widgets het best geschikt zijn zodat de klant een  interactief en dynamisch gepersonaliseerde dashboard kan samen stellen door middel van selectie en instellingen, alsook in welke mate ontwikkeling van nieuwe widgets en andere software noodzakelijk is.
+    
+    %---------- Stand van zaken ---------------------------------------------------
+    
+    \section{State-of-the-art}%
+    \label{sec:state-of-the-art}
+    
+    Binnen verscheidene organisaties wordt de term “dashboard” gebruikt om een systeem te beschrijven dat data visualiseert die handig is voor het maken van beslissingen. Een dashboard dient de gebruiker te informeren zonder ze af te leiden van het eigenlijke doel. Daarom gebruikt men op dashboards veelal verschillende grafieken, tabellen, kaarten, icoontjes, … . Om de gebruiker zo een samenvatting te geven van de verzamelde data, waarop die zich dan kan baseren om conclusies te maken. 
+    Het juiste design van een dashboard is zeer belangrijk. De meeste dashboards zijn gemaakt om zo veel mogelijk data in 1 keer weer te geven. Dit terwijl ze eigenlijk enkel de belangrijke data op de juiste zouden moeten weergeven. Hiervoor dient men steeds eerst een analyse te maken van wat nu juist de belangrijkste data is en hoe die het best kan gevisualiseerd worden. Die keuze kan gemaakt worden aan de hand van het GQM-model of het Goal Question Measurement model. Hierin gaat men na wat het doel is, met andere woorden wat willen we te weten komen. Dan selecteren we de juiste data op basis van het feit of ze aan het doel beantwoorden. Wanneer geweten is wat moet weergeven worden, kunnen we de bijhorende beste visualisatiemethode bepalen.\autocite{Janes2013}
+    
+    
+    Er is reeds onderzoek gedaan naar het ontwerpen van custom en dynamic dashboards. Omdat het maken van dashboards relatief makkelijker en goedkoper is dan vroeger, is het maken van gepersonaliseerde dashboards een vraagstuk naar waar we kunnen kijken. Voorlopig zijn er vooral statische dashboards te vinden op de meeste websites. Indien ze toch custom zijn, zijn ze vooral ontworpen voor een bepaalde rol. Zo worden er op voorhand verschillende custom dashboards gemaakt gebaseerd op verschillende rollen, dit aangezien een CEO niet hetzelfde wil weten als een manager van een bepaald deel binnen het bedrijf of de gewone gebruiker van buiten het bedrijf. Dynamische dashboards worden nog maar zeer zelden toegepast in de praktijk. Dynamische dashboards zullen hun layout aanpassen aan de hand van data verkregen tijdens run-time. Het verzamelen van die data gebeurt door te kijken met welke delen van het dashboard de user het meest in aanraking komt. Hieruit kan via analyse geconcludeerd worden welke informatie het belangrijkst is voor de gebruiker. Dan kan op het dashboard weergegeven worden wat de gebruiker het vaakst bekijk en gebruikt. De beste oplossing is om de twee te combineren en zowel statisch al dynamisch te werken en dus op een hybride manier. \autocite{Kruglov2021}
+    
+    
+    Er zijn drie aanpassingsniveaus van dynamic dashboards. Er is het eerste level, hierin kunnen gebruikers zelf enkele eenvoudige parameters meegeven. Aan de hand van die parameters zal de gebruiker dus gefilterde resultaten terug krijgen. Ook kan hij hier kiezen welke componenten hij wil zien op het dashboard. Dan is er het tweede level, hier kunnen gebruikers zelf berekeningen uitvoeren op de data en kiezen hoe deze juist afgebeeld wordt. Ten slotte is er nog een derde level, de gebruikers kunnen op dit level de data zelf aanpassen.\autocite{Ji2014}
+    
+    
+    Er bestaan reeds allerhande manieren om statische data op te halen uit een database en deze te visualiseren op een statisch dashboard. Het gebruiken van trackingdata van GPS toestellen en deze in real time weergeven op een dashboard is eerder beperkt. Ook de live analyse van de data die binnen komt, moet in real time verwerkt en afgebeeld worden om dan de gebruiker zelf de controle te geven over die data en de analyses die hij zelf wil laten maken. Er bestaan reeds diverse open-source librairies die deze functionaliteiten mogelijk maken, maar deze combineren wordt nog niet vaak gedaan.
+    \pagebreak
+    %---------- Methodologie ------------------------------------------------------
+    \section{Methodologie}%
+    \label{sec:methodologie}
+    
+    Om een correcte aanbeveling te kunnen geven aan Sensolus betreffende relevante open-source libraries en custom development vereisten om een dynamisch en interactief gepersonaliseerde dashboard op te stellen, zal er eerst een overzicht gemaakt worden van de nodige vereisten voor het dashboard.
+    Op basis van deze vereisten zal ik dan kijken welke tools reeds beschikbaar zijn via open-sourced libraries en het best uitwisselbaar zijn met het te gebruiken web platform en waar er nog tekortkomingen zijn waardoor custom development noodzakelijk is.
+    De compatibiliteit van de widgets en het web platform (React) zullen bestudeerd worden aan de hand van literatuur en beschikbare voorbeelden.
+    Om de functionaliteit van de widgets te testen zal ik een proof of concept (PoC) opstellen en uitvoeren.
+    Hierin zal nagegaan worden of de geselecteerde widgets bruikbaar zijn voor het te gebruiken web platform.
+    In de eerste fase zal er een kleinschalig en eenvoudig dashboard gemaakt worden waarin bekeken wordt of de geselecteerde bestaande widgets de beste zijn om te werken met React. Deze fase zou  ongeveer 3 weken duren.
+    In de tweede fase zal er dan een complexer dashboard gemaakt worden om te kijken hoe de eerste fase van de proof of concept opgeschaald kan worden en welke nieuwe widgets of aanpassingen er eventueel moeten ontwikkeld worden. Deze fase zou ongeveer 5 tot 6 weken duren.
+    
+    
+    %---------- Verwachte resultaten ----------------------------------------------
+    \section{Verwacht resultaat, conclusie}%
+    \label{sec:verwachte_resultaten}
+    
+    Uit de analyse moet blijken welke open-source libraries het meest aanbevolen zijn om een eigen dashboard eenvoudig te kunnen samenstellen via selectie van beschikbare widgets. 
+    Daarnaast zal geïdentificeerd worden waar er nog extra ontwikkeling nodig is om de gevraagde informatie in het juiste formaat te visualiseren.
+    Hopelijk zal door middel van de PoC een aanzet gegeven zijn voor de verdere uitwerking van het custom dashboard voor GPS tracking systemen.
+    
+    \pagebreak
+    
+    \printbibliography[heading=bibintoc]
+    
 \end{document}
